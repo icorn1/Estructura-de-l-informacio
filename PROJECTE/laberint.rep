@@ -1,0 +1,19 @@
+/*
+Pràctica d'ESIN Q1 21-22. Ixent Cornella Vilana, Eric Gonzalez Duro
+****** CLASSE "laberint": ******
+
+OBJECTIUS DE LA CLASSE:
+	La classe laberint permet representar i manipular laberints ortogonals, formats per cambres (objectes de la classe cambra).
+	
+IMPLEMENTACIÓ ESCOLLIDA:
+	Hem triat una representació del laberint amb només un punter a una array de cambres, i que aquest apunti a la primera cambra del laberint.
+	A l'hora de crear el laberint, reservem memòria dinàmica per a un laberint de tamany _tam (que no és més que la multiplicació de _nfils per _ncols, ambdós
+	naturals que indiquen el numero de columnes del laberint i el de files). Això es pot fer amb la linia " _lab = new cambra[_tam]", que el que fa es retornar un punter
+	a la primera cambra per les que s'ha reservat memòria dinàmica. Creiem que aquesta representació és la millor que es podria fer, ja que el laberint només es crea un
+	cop tenim _tam, i això només es pot fer amb memòria dinàmica.
+*/
+
+nat _nfils;	//Numero de files
+nat _ncols;	//Numero de columnes
+
+cambra *_lab; // Punter a la primera cambra del laberint

@@ -1,0 +1,26 @@
+/*
+Pràctica d'ESIN Q1 21-22. Ixent Cornella Vilana, Eric Gonzalez Duro
+****** CLASSE "cambra": ******
+
+OBJECTIUS DE LA CLASSE:
+	Un objecte de la classe cambra representa una habitació rectangular del laberint, i
+	conté informació sobre les parets que tenen porta a una altra cambra. És a dir, indica si
+	les parets NORD, SUD, EST o OEST tenen porta o no. És més que res una classe de suport pel
+	laberint.
+	
+IMPLEMENTACIÓ ESCOLLIDA:
+	Nomes necessitem  booleans per representar els privats de la classe ja que son els únics atributs necessaris per
+	poder complir els objectius de la classe (contenir informació sobre 4 parets). 
+	Podriem haver creat alguna cosa tipus pair<paret, bool>, pero al tenir 4 variables privades, ja sabem quina paret
+	es tracta, sent _nord per nord, _sud per sud, etc. Realment, no ens fa pas falta un atribut paret.
+	Tampoc es ideal crear una array de booleans, ja que per referir-se al boolea es mes senzill fer-ho pel nom que 
+	per un numero. Ex: _nord == parets[0] -> es mes clar que _nord fa referencia a la paret nord.
+	PD: Per conveni fem que els atributs privats començin amb "_", per identificar-los facilment.
+*/
+
+
+//Nomes seran "false" si la porta està tancada.
+bool _nord;
+bool _sud;
+bool _est;
+bool _oest;

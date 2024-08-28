@@ -1,0 +1,62 @@
+/*
+Pràctica d'ESIN Q1 21-22. Ixent Cornella Vilana, Eric Gonzalez Duro
+****** CLASSE "partició": ******
+
+OBJECTIUS DE LA CLASSE:
+	La classe genèrica particio<T> emmagatzema una col·lecció d’elements de la classe
+	T classificats en diferents grups sense importar l’ordre. Les dues operacions principals
+	d’una particio són la unió de grups i la cerca de si dos elements pertanyen al mateix
+	grup. Aquesta classe té el comportament clàssic d’un mfset. S'ha d'implementar de forma eficient.
+	
+IMPLEMENTACIÓ ESCOLLIDA:
+	Alternatives considerades:
+	- Array dinàmica, on cada element de la particio està indexat segons l'ordre d'entrada a la partició. L'hem descartada per ineficiencia temporal.
+	- AVL. Aquesta implementació seria eficient a nivell temporal, però potser massa complicada d'implementar. Descartada.
+	- Taula de dispersió. Aquest mètode no és especialment díficil d'implementar, i a sobre és eficient temporalment. Escollim taules de dispersió.
+	
+	De les taules de dispersió, hem decidit usar una implementació amb sinònims encadenats indirectes, ja que el cost espacial serà més gran,
+	pero contem amb que la funció hash serà bona per tal de reduir al màxim les colisions, fent així una taula de dispersió més eficient.
+	
+	Usem una estructura de node_hash on cada un d'aquests conté:
+		- L'element a guardar (de tipus T).
+		- Un punter al seguent node de la llista a la està el node (recordem que usem una implementació amb sinònims encadenats indirectes).
+		- Un punter al representant del node. Aquest és NULL si apunta a ell mateix (per facilitar codi) i sinó, apunta al node que el representa 
+		  (el seu "pare" si ho veiem en forma d'arbre).
+		- Un integer que ens guardarà el tamany del node, és a dir, quants nodes el tenen a ell com a pare. Ens servirà per fer l'unió per pes (Quick-union).
+		  Reduïm lleugerament l'eficiència espacial per centrar-nos en l'eficiència temporal, que es veurà molt beneficiada amb el quick union.
+		  
+	Ens cal també un punter als punters de les llistes, que serà la nostra taula de dispersió, l'anomenarem "_part".
+	
+	En conclusió, aquesta implementació és més costosa a nivell espacial que d'altres, però el cost de totes les operacions (menys crear/copiar) és gairebé constant.
+	En balanç, tindrem una partició eficient. 
+*/
+
+
+
+//ATRIBUTS PER FACILITAR OPERACIONS
+nat _nmax; 		// Representa el numero maxim d'elements que pot sostenir la particio.
+nat _nelems; 		// Conta el numero d'elements a la particio, inicialment es 0.
+nat _grups; 		// Indica el numero de grups a la particio. Inicialment es 0, i incrementa a partir dels elements afegits. 
+
+
+struct node_hash {
+    T _k; 		// Representa l'element a guardar
+    node_hash *_seg; 	// Punter al seguent element (default: NULL)
+    node_hash *_rep; 	// Ens indica el node al que representa, per defecte sera NULL. (Potser hages anat millor amb un tipus T)
+    int _tam; 		// Ens serveix per saber quants nodes te el p.i. que l'apunten (inclos ell mateix), es a dir, el tamany. Per defecte sera 1.
+};
+node_hash **_part;
+
+//Funcions privades per facilitar la feina.
+node_hash *find(const T &x) const; 	//Aquesta funció, donat un element x, busca l'element a la taula de dispersió (tot i mirant si hi han
+					//colisions), i si el troba, retorna el node corresponent, sinó, retorna NULL. Hem inclòs aquesta 
+					//funció per tal de no repetir el procediment de buscar un element molts cops.
+node_hash *find_rep(const T &x) const;	//Busca el representant d'un node
+					
+node_hash* copia_llista(node_hash *p); //Aquesta funció ens serveix per copiar una llista simplement encadenda (la que utilitzem a la taula) 
+					
+
+void esborra_llista(node_hash *p);	//Al igual que copiem la llista, també ens cal esborrar-la. Aquesta funció, donat un punter que apunta al
+					//node d'una llista, s'esborra el seguent d'aquest node, si en te, i el node ensí, garantint que s'esborri
+					//la llista en la seva totalitat.
+
